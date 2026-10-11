@@ -22,6 +22,7 @@ use tracing::{info, warn};
 
 use fit_launcher_config::client::dns::CUSTOM_DNS_CLIENT;
 use fit_launcher_scraping::db;
+use fit_launcher_ui_automation::QueueStatus;
 
 // Define a shared boolean flag
 static STOP_FLAG: AtomicBool = AtomicBool::new(false);
@@ -312,10 +313,18 @@ pub fn open_devtools(app: AppHandle) {
 }
 #[tauri::command]
 #[specta]
-pub fn get_install_queue_status()
--> Result<fit_launcher_ui_automation::controller_manager::QueueStatus, CustomError> {
-    fit_launcher_ui_automation::controller_manager::get_install_queue_status()
-        .map_err(|e| CustomError { message: e })
+pub fn get_install_queue_status() -> Result<QueueStatus, CustomError> {
+    #[cfg(windows)]
+    {
+        fit_launcher_ui_automation::controller_manager::get_install_queue_status()
+            .map_err(|e| CustomError { message: e })
+    }
+    // No elevated installer service on non-Windows platforms, so the queue is
+    // always empty. Mirrors the frontend's initial state.
+    #[cfg(not(windows))]
+    {
+        Ok(QueueStatus::default())
+    }
 }
 
 #[tauri::command]

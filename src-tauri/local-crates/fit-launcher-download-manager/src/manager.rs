@@ -378,6 +378,7 @@ impl DownloadManager {
     #[allow(unused)]
     pub async fn resume(self: &Arc<Self>, job_id: &str) -> Result<()> {
         // ensure runnin because we might try to resume a download after restarting the app which will then not ask for UAC rights until install which is bad.
+        #[cfg(windows)]
         if let Err(e) = fit_launcher_ui_automation::controller_manager::ControllerManager::global()
             .ensure_running()
         {
@@ -587,6 +588,7 @@ impl DownloadManager {
                 let mut last_emit = self.last_emit.write().await;
                 last_emit.remove(job_id);
 
+                #[cfg(windows)]
                 if let Ok(uuid) = Uuid::parse_str(job_id) {
                     let _ =
                         fit_launcher_ui_automation::controller_manager::ControllerManager::global()

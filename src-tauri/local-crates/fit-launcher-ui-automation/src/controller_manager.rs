@@ -30,11 +30,7 @@ pub struct QueuedInstallJob {
 }
 
 // For UI
-#[derive(serde::Serialize, Type)]
-pub struct QueueStatus {
-    pub queue: Vec<String>,
-    pub active: Option<String>,
-}
+pub use crate::QueueStatus;
 
 #[derive(Default)]
 struct ManagerState {

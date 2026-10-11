@@ -21,7 +21,7 @@ codegen-units = 256
 incremental = false
 debug = false
 strip = "symbols"
-lto = true
+lto = "thin"
 codegen-units = 1
 
 [profile.bloaty]

@@ -1,5 +1,7 @@
 {
   "bundle": {
-    "externalBin": []
+    "externalBin": [],
+    "targets": ["appimage"],
+    "createUpdaterArtifacts": false
   }
 }

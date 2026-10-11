@@ -5,7 +5,6 @@ pub mod controller_manager;
 pub mod emitter;
 pub mod extraction;
 
-#[cfg(windows)]
 pub mod defender;
 
 pub mod mighty_commands;
@@ -36,6 +35,16 @@ pub enum InstallationError {
 
     #[error("App is not in admin mod")]
     AdminModeError,
+}
+
+/// Status of the installer queue, as consumed by the UI.
+///
+/// Defined here (rather than in `controller_manager`) so the type exists on
+/// every platform and the generated frontend bindings stay identical.
+#[derive(serde::Serialize, Type, Default)]
+pub struct QueueStatus {
+    pub queue: Vec<String>,
+    pub active: Option<String>,
 }
 
 #[cfg(windows)]
